@@ -68,10 +68,8 @@ module Barnacle
         EventMachine::add_periodic_timer(1) do
          DNSSD.browse('_barnacle._tcp') do |result|
            unless @peers[result.name] or result.name == @uuid then
-             p "DISCOVERED #{result.name} FROM DNSSD"
              DNSSD.resolve(result) do |resolved|
-               p "RESOLVED #{resolved.target}:#{resolved.port}"
-               #Peer.new(:host => resolved.target+':'+resolved.port, :server => self).connect
+               Peer.new(:host => resolved.target, :port => resolved.port, :server => self).connect
              end
            end
          end

@@ -18,7 +18,7 @@ module Barnacle
     end
     
     def interpret_message(string)
-      # look for a protocol version
+      # TODO: look for a protocol version
       YAML::load(string).each{|k,v| # UNSAFE AS SHIT, FIXME
         self.send("#{k}=", v)
       }
