@@ -1,19 +1,34 @@
-= barnacle
+=== barnacle ===
 
-Description goes here.
+Barnacle is a gossip library for Ruby.
 
-== Contributing to barnacle
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+Peer -> Pier -> Barnacle.
+get it?
 
-== Copyright
+Barnacle handles discovery and message passing.
 
-Copyright (c) 2011 Adrian Pike. See LICENSE.txt for
-further details.
+== Quickstart ==
 
+Take a look at example.rb, and start it up on two machines.
+On the second machine you start up, use the IP of the first one as the first argument.
+Now fire it up on any other machines, point it anywhere in the network, and watch the magic happen!
+
+== Node Lifecycle ==
+- Discover peers, join the graph.
+- Replace slow peer links with faster links.
+ - Maintain connectivity!
+ - Configurable maximum number of links.
+- Pass messages to other peers.
+ - Take care of any loops.
+ - Specify a subset of nodes, or send to _everybody_.
+
+== TODO ==
+ - Actually finish it, and bring in the tests
+ - Logger
+ - Modularize node discovery channels
+ - Modularize messaging protocol
+ - Rewrite traversal so it's more efficient
+ - GC the message sent list with timestamps
+ - Disconnections
+ - Handle ports on servers
+ - Handle reconnections

@@ -1,0 +1,9 @@
+= Startup
+- Each Node starts a listener on PORT
+- Node attempts to connect to seed nodes
+
+= On new connection
+- Both ends broadcast their UUIDs, but without IP information
+
+= On a UUID coming in
+- We set up a Node with either the IP provided over the wire, or the IP we know
