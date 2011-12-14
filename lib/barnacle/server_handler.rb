@@ -25,14 +25,15 @@ module Barnacle
         unless @server.peers[m.key] or m.key == @server.uuid then
           if (m.value) then
             # The other end is sending us some nodes to know about.
-            ip = m.value
+            ip = m.value[:ip]
+            port = m.value[:port]
           else
             # The client just let us know who they were.
             port, ip = Socket.unpack_sockaddr_in(get_peername)
             @remote_uuid = m.key
           end
           # TODO: use port correctly :/
-          n = Peer.new(:host => ip, :uuid => m.key, :connection => self)
+          n = Peer.new(:host => ip, :port => port, :uuid => m.key, :connection => self)
           @server.peers[m.key] = n
         end
       when :node_request

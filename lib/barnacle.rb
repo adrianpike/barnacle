@@ -2,6 +2,7 @@ require 'rubygems'
 require 'eventmachine'
 require 'uuid'
 require 'yaml'
+require 'dnssd'
 
 require 'barnacle/message'
 require 'barnacle/peer'

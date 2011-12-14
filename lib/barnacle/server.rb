@@ -1,7 +1,7 @@
 module Barnacle
 
   class Server
-    attr_accessor :peers, :uuid
+    attr_accessor :peers, :uuid, :port
   
     def initialize(args)
       @peers = {}
@@ -41,18 +41,41 @@ module Barnacle
         Barnacle.log "dropping a message that weve already broadcasted from #{source_uuid}"
       end
     end
+    
+    def find_available_port
+      starting_port = 6061
+      
+    end
   
     def run
       EventMachine::run {
         printf "[Barnacle] node initializing..."
         @uuid = UUID.new.generate
-        @signature = EventMachine.start_server("0.0.0.0", "6061", ServerHandler, self)
+        @signature = EventMachine.start_server("0.0.0.0", 0, ServerHandler, self)
+        socket = EventMachine.get_sockname(@signature)
+        @port, address = Socket.unpack_sockaddr_in(socket)
         post_setup
-        puts " initialized."
+        puts " initialized on port #{@port}"
       
+        
         @options[:seed_hosts].each{|host|
-          Peer.new(:host => host, :server => self).connect
+          Peer.new(:host => host.split(':').first, :port => host.split(':').last, :server => self).connect
         }
+        
+        DNSSD.register(@uuid, '_barnacle._tcp', nil, @port) do |r|; end
+        
+        # Now we need to set up a thread to ask for new nodes every once in a while, and ask DNSSD to autodiscover stuff. skeet.
+        EventMachine::add_periodic_timer(1) do
+         DNSSD.browse('_barnacle._tcp') do |result|
+           unless @peers[result.name] or result.name == @uuid then
+             p "DISCOVERED #{result.name} FROM DNSSD"
+             DNSSD.resolve(result) do |resolved|
+               p "RESOLVED #{resolved.target}:#{resolved.port}"
+               #Peer.new(:host => resolved.target+':'+resolved.port, :server => self).connect
+             end
+           end
+         end
+        end
       }
     end
   

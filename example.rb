@@ -1,6 +1,25 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'barnacle'
 
+class KeyboardHandler < EM::Connection
+  include EM::Protocols::LineText2
+
+  attr_reader :server
+
+  def initialize(barnacle_server)
+    @server = barnacle_server
+  end
+
+  def receive_line(data)
+    
+    @server.send(data, {
+      :queue => 'msg_q',
+      :peers => 'all', # or a number of peers
+      :peer_order => 'fastest' # or slowest, or random
+    })
+  end
+end
+
 class BarnacleTest < Barnacle::Server
   
   def peer_connect(peer)
@@ -15,6 +34,8 @@ class BarnacleTest < Barnacle::Server
   end
 
   def post_setup
+    EventMachine.open_keyboard(KeyboardHandler, self)
+    
     EventMachine::add_periodic_timer(5) do
 
       printf "\n"
@@ -23,12 +44,6 @@ class BarnacleTest < Barnacle::Server
         printf " #{k} -> #{node.host}" 
         printf "\n"
       }
-      
-      send('message:' + @uuid, {
-        :queue => 'msg_q',
-        :peers => 'all', # or a number of peers
-        :peer_order => 'fastest' # or slowest, or random
-      })
 
     end
     

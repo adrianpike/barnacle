@@ -25,11 +25,11 @@ Now fire it up on any other machines, point it anywhere in the network, and watc
 == TODO
  - Actually finish it, and bring in the tests
  - Logger
- - Modularize node discovery channels
-  - Need zeroconf like stat.
+ - Race condition of two nodes connecting to each other
+ - http://dnssd.rubyforge.org/
  - Modularize messaging protocol
  - Rewrite traversal so it's more efficient
  - GC the message sent list with timestamps
  - Disconnections
- - Handle finding an open port on servers
  - Handle reconnections
+ - Customizable service name for dnssd
