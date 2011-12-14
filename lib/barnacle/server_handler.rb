@@ -22,22 +22,29 @@ module Barnacle
       m = Message.new(data)
       case m.type
       when :node_identification
-        unless @server.peers[m.key] or m.key == @server.uuid then # We already know about them!
-          # The client just let us know who they were.
+        unless @server.peers[m.key] or m.key == @server.uuid then
           if (m.value) then
+            # The other end is sending us some nodes to know about.
             ip = m.value
           else
+            # The client just let us know who they were.
             port, ip = Socket.unpack_sockaddr_in(get_peername)
+            @remote_uuid = m.key
           end
           # TODO: use port correctly :/
           n = Peer.new(:host => ip, :uuid => m.key, :connection => self)
-          @remote_uuid = m.key
           @server.peers[m.key] = n
         end
       when :node_request
         # They asked for more nodes, let's give them some.
-        # We're going to send them a bunch of :node_identification messages!
-    
+        @server.peers.each{|peer_uuid, peer|
+          m = Message.new({
+            :type => :node_identification,
+            :key => peer_uuid,
+            :value => peer
+          })
+          send_data m.to_protocol(1)
+        }
       when :app_message
         # Pass it to the App, and pass it on to other nodes if needed.
         @server.rebroadcast_message(m, @remote_uuid)
