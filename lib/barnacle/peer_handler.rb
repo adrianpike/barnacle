@@ -30,7 +30,6 @@ module Barnacle
         end
       when :node_request
         # They asked for more nodes, let's give them some.
-      
       when :app_message
         # Pass it to the App, and pass it on to other nodes if needed.
         @node.server.rebroadcast_message(m, @node.uuid)

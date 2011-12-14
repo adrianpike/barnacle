@@ -1,4 +1,4 @@
-=== barnacle ===
+= barnacle
 
 Barnacle is a gossip library for Ruby.
 
@@ -7,13 +7,13 @@ get it?
 
 Barnacle handles discovery and message passing.
 
-== Quickstart ==
+== Quickstart
 
 Take a look at example.rb, and start it up on two machines.
 On the second machine you start up, use the IP of the first one as the first argument.
 Now fire it up on any other machines, point it anywhere in the network, and watch the magic happen!
 
-== Node Lifecycle ==
+== Node Lifecycle
 - Discover peers, join the graph.
 - Replace slow peer links with faster links.
  - Maintain connectivity!
@@ -22,13 +22,14 @@ Now fire it up on any other machines, point it anywhere in the network, and watc
  - Take care of any loops.
  - Specify a subset of nodes, or send to _everybody_.
 
-== TODO ==
+== TODO
  - Actually finish it, and bring in the tests
  - Logger
  - Modularize node discovery channels
+  - Need zeroconf like stat.
  - Modularize messaging protocol
  - Rewrite traversal so it's more efficient
  - GC the message sent list with timestamps
  - Disconnections
- - Handle ports on servers
+ - Handle finding an open port on servers
  - Handle reconnections
