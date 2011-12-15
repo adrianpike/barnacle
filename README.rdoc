@@ -9,9 +9,11 @@ Barnacle handles discovery and message passing.
 
 == Quickstart
 
-Take a look at example.rb, and start it up on two machines.
+Take a look at examples/chat.rb, and start it up on two machines.
 On the second machine you start up, use the IP of the first one as the first argument.
 Now fire it up on any other machines, point it anywhere in the network, and watch the magic happen!
+
+== Usage
 
 == Node Lifecycle
 - Discover peers, join the graph.
@@ -24,12 +26,11 @@ Now fire it up on any other machines, point it anywhere in the network, and watc
 
 == TODO
  - Actually finish it, and bring in the tests
- - Logger
- - Race condition of two nodes connecting to each other
- - http://dnssd.rubyforge.org/
+ - Better logging
+ - Race condition around two nodes connecting to each other
  - Modularize messaging protocol
  - Rewrite traversal so it's more efficient
+  - Have different traversal strategies
  - GC the message sent list with timestamps
  - Disconnections
- - Handle reconnections
  - Customizable service name for dnssd

@@ -42,11 +42,6 @@ module Barnacle
       end
     end
     
-    def find_available_port
-      starting_port = 6061
-      
-    end
-  
     def run
       EventMachine::run {
         printf "[Barnacle] node initializing..."
@@ -65,7 +60,14 @@ module Barnacle
         DNSSD.register(@uuid, '_barnacle._tcp', nil, @port) do |r|; end
         
         # Now we need to set up a thread to ask for new nodes every once in a while, and ask DNSSD to autodiscover stuff. skeet.
-        EventMachine::add_periodic_timer(1) do
+        EventMachine::add_periodic_timer(60) do
+          # message = Message.new({
+          # })
+          # @peers.each {|peer|
+          #  peer.ask_for_nodes, etc.
+          # }
+          
+        
          DNSSD.browse('_barnacle._tcp') do |result|
            unless @peers[result.name] or result.name == @uuid then
              DNSSD.resolve(result) do |resolved|
